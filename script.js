@@ -1,17 +1,42 @@
-let inputs = document.getElementById("inp");
-let text = document.querySelector(".text");
+let listContainer = document.getElementById('list-container')
+let head = document.querySelector('head')
+let inputBox = document.getElementById('input-box')
 
-function Add(){
-    if(inputs.value == ""){
-        alert("Please Enter Task")
-    }else{
-        let newEle = document.createElement("ul");
-        newEle.innerHTML=`${inputs.value} <i class="fa-solid fa-trash"></i>`;
-        text.appendChild(newEle);
-        inputs.value="";
-        newEle.querySelector("i").addEventListener("click" , remove);
-        function remove(){
-            newEle.remove()
-        }
+
+function addTask(){
+    if(inputBox.value == ''){
+        alert('Please Enter the Text')
     }
+    else{
+        const task = document.createElement('li')
+        task.textContent = inputBox.value;
+        listContainer.appendChild(task)
+        let span = document.createElement('span')
+        span.textContent = "\u00d7"
+        task.appendChild(span)
+        span.style.right = '0px';
+    }
+    inputBox.value = '';
+    saveData()
 }
+
+listContainer.addEventListener('click', (e)=>{
+    if(e.target.tagName === 'LI'){
+        e.target.classList.toggle("checked")
+        saveData()
+    }
+    else if(e.target.tagName === 'SPAN'){
+        e.target.parentElement.remove()
+        saveData()
+    }
+})
+
+function saveData(){
+    localStorage.setItem("data",listContainer.innerHTML)
+}
+
+function showTask(){
+    listContainer.innerHTML = localStorage.getItem("data");
+}
+
+showTask()
